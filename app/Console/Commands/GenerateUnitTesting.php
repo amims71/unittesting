@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
@@ -12,7 +13,7 @@ class GenerateUnitTesting extends Command
      *
      * @var string
      */
-    protected $signature = 'watch:video {type} {file}';
+    protected $signature = 'generate:test {type} {file}';
 
     /**
      * The console command description.
@@ -20,6 +21,8 @@ class GenerateUnitTesting extends Command
      * @var string
      */
     protected $description = 'Command description';
+
+    protected $unitTestHelper;
 
     /**
      * Create a new command instance.
@@ -38,87 +41,18 @@ class GenerateUnitTesting extends Command
      */
     public function handle()
     {
-        $vid=$this->argument('file');
-        $token=$this->argument('type');
-        switch ($token){
-            case config('ibo.users.a'):
-                $this->token=config('ibo.tokens.a');
-                break;
-            case config('ibo.users.b'):
-                $this->token=config('ibo.tokens.b');
-                break;
-            case config('ibo.users.c'):
-                $this->token=config('ibo.tokens.c');
-                break;
-            case config('ibo.users.d'):
-                $this->token=config('ibo.tokens.d');
-                break;
-            case config('ibo.users.e'):
-                $this->token=config('ibo.tokens.e');
-                break;
-            case config('ibo.users.f'):
-                $this->token=config('ibo.tokens.f');
-                break;
-            default:
-                $this->token=$token;
-        }
-        $this->crawler($vid);
-    }
-
-
-    private function crawler($vid){
-        $this->alert('Getting More Videos with '.$vid);
-        $response=Http::get($this->homepage,[
-            'vId'=>$vid
-        ]);
-        $videos=json_decode($response->body())->details->videos;
-        $totalVideos=count($videos);
-        foreach ($videos as $key=>$video){
-            $this->earnFrom($video->_id);
-            if (++$key==$totalVideos) $this->crawler($video->_id);
-        }
-
-    }
-
-    private function earnFrom($vid){
-        $this->warn('Working on video '.$vid);
-        $response = $this->responseFrom(0,$this->start,$vid);
-        if ($response->json()['statusCode']==200) {
-            $this->info('Start ' . $response->body());
-            $this->watchVideo($vid);
-            $this->responseFrom('End',$this->end,$vid);
-            $this->responseFrom('Balance',$this->getbalance,$vid);
-        }
-    }
-
-    private function watchVideo($vid){
-        $this->responseFrom('Add View',$this->addView,$vid);
-        $this->responseFrom('Add History',$this->addHistory,$vid);
-        for ($i=1;$i>0;$i++){
-            $response = $this->responseFrom('Add Count number '.$i,$this->watchCount,$vid,$i);
-            if ($response->json()['statusCode']==429) {
-                $this->info('Waiting 5 seconds');
-                sleep(5);
-                $response = $this->responseFrom('Add Count number '.$i,$this->watchCount,$vid,$i);
-            }
-            if ($response->json()['statusCode']==403) break;
-            $this->info('Waiting 40 seconds');
-            sleep(40);
-        }
-    }
-
-    private function responseFrom($info,$route,$vid,$timestamp=0){
-        $requestBody=[
-            'vId' => $vid
-        ];
-        if ($timestamp) $requestBody['timeStamp']=$timestamp;
-        $response = Http::withHeaders([
-            "Authorization" => "Bearer " . $this->token
-        ])
-            ->post($route, $requestBody);
-        if ($info==="End") $this->question($info.' '.$response->body());
-        elseif ($info==="Balance") $this->error($info.' '.$response->body());
-        elseif ($info) $this->info($info.' '.$response->body());
-        return $response;
+        $file=$this->argument('file');
+        $type=$this->argument('type');
+        $this->unitTestHelper=new UnitTestHelper($file);
+        $this->unitTestHelper->addNameSpace('test');
+        $this->unitTestHelper->addRequires($file);
+        $this->unitTestHelper->addUses();
+        $this->unitTestHelper->addClassname();
+        $this->unitTestHelper->addClassObject();
+        $this->unitTestHelper->addProperties();
+        $this->unitTestHelper->addSetUp();
+        $this->unitTestHelper->addConstructedObject();
+        $this->unitTestHelper->addTearDownMethod();
+        $this->info($this->unitTestHelper->output);
     }
 }
