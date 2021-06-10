@@ -26,7 +26,6 @@ class UnitTestHelper{
         } catch (Error $error) {
             echo "Parse error: {$error->getMessage()}\n";
         }
-
         $this->object=$ast[0];
         $this->class=$this->object->stmts[0];
         $statements=$this->class->stmts;
@@ -61,7 +60,7 @@ require \''.$file.'\';';
     public function addUses(){
         $this->output.='
         
-use '.$this->object->name->parts[0].'\\'.$this->class->name->name.';
+use '.implode('\\',$this->object->name->parts).'\\'.$this->class->name->name.';
 use ReflectionClass;
 use PHPUnit\Framework\TestCase;
 
@@ -116,10 +115,58 @@ use PHPUnit\Framework\TestCase;
 
         $this->output.='
     }
-            ';
+
+';
     }
 
+    public function addMethods(){
+        $testMethods='';
 
+        foreach ($this->methods as $method){
+            $prprty='';
+            $asrt='';
+            if (@$method->returnType->name=='void'){
+                $prprty='$this->'.lcfirst($this->class->name->name).'->'.$method->name->name.'($expected);';
+                $asrt='$this->assertSame($expected, $property->getValue($this->'.lcfirst($this->class->name->name).'));';
+                $testMethods.='public function test'.ucfirst($method->name->name).'(): void
+    {
+        $expected = \'\';//TODO set test value
+        $property = (new ReflectionClass('.$this->class->name->name.'::class))
+            ->getProperty(\'name\');
+        $property->setAccessible(true);
+        '.$prprty.'
+        '.$asrt.'
+    }
+
+';
+            } else{
+                $params=$method->params;
+                $paramNames=[];
+                $prprty='';
+                if (sizeof($params)>0) {
+                    foreach($params as $param){
+                        $paramName='$'.$param->var->name;
+                        array_push($paramNames,$paramName);
+                        $prprty.=$paramName.'=\'\'; //TODO set test value
+        ';
+                    }
+                }
+                $paramNames=implode(',', $paramNames);
+                $asrt='$this->assertSame($expected, $this->'.lcfirst($this->class->name->name).'->'.$method->name->name.'('.$paramNames.'));';
+                $testMethods.='    public function test'.ucfirst($method->name->name).'(): void
+    {
+        $expected = \'\';//TODO set test value
+        '.$prprty.'
+        '.$asrt.'
+    }
+
+';
+            }
+
+        }
+        $this->output.=$testMethods.'}
+';
+    }
 
 
 }
