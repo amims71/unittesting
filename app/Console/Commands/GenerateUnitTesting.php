@@ -45,7 +45,7 @@ class GenerateUnitTesting extends Command
         $type=$this->argument('type');
         $this->unitTestHelper=new UnitTestHelper($file);
         $this->unitTestHelper->addNameSpace('test');
-        $this->unitTestHelper->addRequires($file);
+//        $this->unitTestHelper->addRequires($file);
         $this->unitTestHelper->addUses();
         $this->unitTestHelper->addClassname();
         $this->unitTestHelper->addClassObject();
@@ -53,6 +53,8 @@ class GenerateUnitTesting extends Command
         $this->unitTestHelper->addSetUp();
         $this->unitTestHelper->addConstructedObject();
         $this->unitTestHelper->addTearDownMethod();
+        $this->unitTestHelper->addMethods();
+        file_put_contents('tests/'.$this->unitTestHelper->class->name->name.'Test.php',$this->unitTestHelper->output);
         $this->info($this->unitTestHelper->output);
     }
 }
