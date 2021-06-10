@@ -1,10 +1,8 @@
 <?php
 
-namespace App\Helpers;
+namespace App\Console\Commands;
 
 
-use Carbon\Carbon;
-use Illuminate\Http\JsonResponse;
 use PhpParser\Error;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
@@ -48,14 +46,6 @@ class UnitTestHelper{
         $this->constructorParams=substr($this->constructorParams, 0, -1);
     }
 
-    public function x($file){
-
-    }
-
-    public function y($ast){
-
-    }
-
     public function addNameSpace($nameSpace){
         $this->output.='
 namespace '.$nameSpace.';
@@ -70,9 +60,12 @@ require \''.$file.'\';';
 
     public function addUses(){
         $this->output.='
+        
 use '.$this->object->name->parts[0].'\\'.$this->class->name->name.';
 use ReflectionClass;
-use PHPUnit\Framework\TestCase;';
+use PHPUnit\Framework\TestCase;
+
+';
     }
 
     public function addClassname(){
@@ -92,6 +85,7 @@ use PHPUnit\Framework\TestCase;';
     }
     public function addSetUp(){
         $this->output.='
+        
     protected function setUp(): void
     {
         parent::setUp();';
@@ -108,20 +102,24 @@ use PHPUnit\Framework\TestCase;';
     }
 
     public function addTearDownMethod(){
-        $this->output.='protected function tearDown(): void
-        {
-            parent::tearDown();
+        $this->output.='
+        
+    protected function tearDown(): void
+    {
+        parent::tearDown();
 
-            unset($this->'.lcfirst($this->class->name->name).');';
+        unset($this->'.lcfirst($this->class->name->name).');';
         foreach ($this->properties as $property){
             $this->output.='
-            unset($this->'.$property->props[0]->name->name.');';
+        unset($this->'.$property->props[0]->name->name.');';
         }
 
         $this->output.='
-        }
+    }
             ';
     }
+
+
 
 
 }
