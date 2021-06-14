@@ -44,8 +44,8 @@ class GenerateUnitTesting extends Command
         $file=$this->argument('file');
         $type=$this->argument('type');
         $this->unitTestHelper=new UnitTestHelper($file);
-        $this->unitTestHelper->addNameSpace('test');
-//        $this->unitTestHelper->addRequires($file);
+        $this->unitTestHelper->addNameSpace('tests');
+        $this->unitTestHelper->addRequires($file);
         $this->unitTestHelper->addUses();
         $this->unitTestHelper->addClassname();
         $this->unitTestHelper->addClassObject();

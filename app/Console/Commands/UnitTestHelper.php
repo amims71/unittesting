@@ -126,16 +126,34 @@ use PHPUnit\Framework\TestCase;
             $prprty='';
             $asrt='';
             if (@$method->returnType->name=='void'){
-                $prprty='$this->'.lcfirst($this->class->name->name).'->'.$method->name->name.'($expected);';
-                $asrt='$this->assertSame($expected, $property->getValue($this->'.lcfirst($this->class->name->name).'));';
+                $params=$method->params;
+                $paramNames=[];
+                $getProp=[];
+                $getAssert=[];
+                $prprty='';
+                if (sizeof($params)>0) {
+                    foreach($params as $key=>$param){
+                        $paramName='$'.$param->var->name;
+                        array_push($paramNames,$paramName);
+                        $prprty.=$paramName.'=\'\'; //TODO set test value
+        ';
+                        $prop='
+        $property'.$key.' = (new ReflectionClass('.$this->class->name->name.'::class))
+            ->getProperty(\''.$param->var->name.'\');
+        $property'.$key.'->setAccessible(true);';
+                        array_push($getProp,$prop);
+                        $asrt='$this->assertSame('.$paramName.', $property'.$key.'->getValue($this->'.lcfirst($this->class->name->name).'));
+        ';
+                        array_push($getAssert,$asrt);
+                    }
+                }
+                $proprty='$this->'.lcfirst($this->class->name->name).'->'.$method->name->name.'('.implode(',', $paramNames).');';
                 $testMethods.='public function test'.ucfirst($method->name->name).'(): void
     {
-        $expected = \'\';//TODO set test value
-        $property = (new ReflectionClass('.$this->class->name->name.'::class))
-            ->getProperty(\'name\');
-        $property->setAccessible(true);
         '.$prprty.'
-        '.$asrt.'
+        '.$proprty.'
+        '.implode('',$getProp).'
+        '.implode('',$getAssert).'
     }
 
 ';
