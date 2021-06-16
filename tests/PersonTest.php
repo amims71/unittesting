@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 class PersonTest extends TestCase{
     protected $person;
-    protected $name='';
+    protected $name;
     protected $name2;
 
     protected function setUp(): void
@@ -32,7 +32,7 @@ class PersonTest extends TestCase{
 
     public function testGreeting(): void
     {
-        $expected = 'Hello, I\'m !';//TODO set test value
+        $expected = '';//TODO set test value
 
         $this->assertSame($expected, $this->person->greeting());
     }
@@ -46,8 +46,8 @@ class PersonTest extends TestCase{
 
 public function testSetName(): void
     {
-        $name='a'; //TODO set test value
-        $name2='b'; //TODO set test value
+        $name='abc'; //TODO set test value
+        $name2='xyz'; //TODO set test value
 
         $this->person->setName($name,$name2);
 
@@ -64,9 +64,9 @@ public function testSetName(): void
 
     public function testAdd(): void
     {
-        $expected = 5;//TODO set test value
-        $x='1'; //TODO set test value
-        $y='4'; //TODO set test value
+        $expected = '';//TODO set test value
+        $x=''; //TODO set test value
+        $y=''; //TODO set test value
 
         $this->assertSame($expected, $this->person->add($x,$y));
     }

@@ -11,7 +11,7 @@ class Person
     }
 
     public function greeting(){
-        return "Hello, I'm {$this->name}!";
+        return "Hello {$this->name}";
     }
 
     public function getName(){
@@ -22,7 +22,7 @@ class Person
         $this->name = $name;
         $this->name2 = $name2;
     }
-    public function add($x,$y){
+    public function add($x,$y):int{
         return $x+$y;
     }
 }

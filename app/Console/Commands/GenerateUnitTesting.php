@@ -58,3 +58,8 @@ class GenerateUnitTesting extends Command
         $this->info($this->unitTestHelper->output);
     }
 }
+
+/*what us ast? why used ast? data flow or not using ast?
+    relative studies, why it is better?
+    testing accuracy
+user experience from 4-5 php developers*/
