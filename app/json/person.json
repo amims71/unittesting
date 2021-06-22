@@ -1,0 +1,91 @@
+{
+    "classLocation" : "App\\Models\\Person",
+    "fileLocation" : "app/Models/Person.php",
+    "className":"Person",
+    "visibility":"public",
+    "properties":[
+        {
+            "name" : "name",
+            "dataType" : "string",
+            "visibility" : "public"
+        },
+        {
+            "name" : "name2",
+            "dataType" : "string",
+            "visibility" : "public"
+        }
+    ],
+    "methods" : [
+        {
+            "name" : "__construct",
+            "returnType" : "void",
+            "visibility" : "public",
+            "arguments" : [
+                {
+                    "name" : "name",
+                    "dataType" : "string"
+                },
+                {
+                    "name" : "name2",
+                    "dataType" : "string"
+                }
+            ]
+        },
+        {
+            "name" : "getName",
+            "returnType" : "string",
+            "visibility" : "public",
+            "arguments" : [
+
+            ]
+        },
+        {
+            "name" : "setName",
+            "returnType" : "void",
+            "visibility" : "public",
+            "arguments" : [
+                {
+                    "name" : "name",
+                    "dataType" : "string"
+                },
+                {
+                    "name" : "name2",
+                    "dataType" : "string"
+                }
+            ]
+        },
+        {
+            "name" : "greeting",
+            "returnType" : "string",
+            "visibility" : "public",
+            "arguments" : [
+
+            ]
+        },
+        {
+            "name" : "add",
+            "returnType" : "int",
+            "visibility" : "public",
+            "arguments" : [
+                {
+                    "name" : "x",
+                    "dataType" : "int"
+                },
+                {
+                    "name" : "y",
+                    "dataType" : "int"
+                }
+            ]
+        }
+    ],
+    "relations" : [
+        {
+            "relationName" : "Inheritance",
+            "relatedClass" : "Student"
+        },
+        {
+            "relationName" : "Aggregation",
+            "relatedClass" : "..."
+        }
+    ]
+}
