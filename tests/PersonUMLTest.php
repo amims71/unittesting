@@ -8,17 +8,17 @@ use App\Models\Person;
 use ReflectionClass;
 use PHPUnit\Framework\TestCase;
 
-class PersonTest extends TestCase{
+class PersonUMLTest extends TestCase{
 	protected $person;
 	protected $name;
 	protected $name2;
 
 	protected function setUp(): void
 	{
-	parent::setUp();
+		parent::setUp();
 		$this->name=''; //TODO set test value
 		$this->name2=''; //TODO set test value
-		$this->person = new Person($this->name);
+		$this->person = new Person($this->name,$this->name2);
 	}
 
 	protected function tearDown(): void
@@ -30,17 +30,10 @@ class PersonTest extends TestCase{
 		unset($this->name2);
 	}
 
-	public function testGreeting(): void
-	{
-		$expected = '';//TODO set test value
-		
-		$this->assertSame($expected, $this->person->greeting());
-	}
-
 	public function testGetName(): void
 	{
 		$expected = '';//TODO set test value
-		
+
 		$this->assertSame($expected, $this->person->getName());
 	}
 
@@ -48,9 +41,9 @@ class PersonTest extends TestCase{
 	{
 		$name=''; //TODO set test value
 		$name2=''; //TODO set test value
-		
+
 		$this->person->setName($name,$name2);
-		
+
 		$property0 = (new ReflectionClass(Person::class))
 			->getProperty('name');
 		$property0->setAccessible(true);
@@ -59,15 +52,22 @@ class PersonTest extends TestCase{
 		$property1->setAccessible(true);
 		$this->assertSame($name, $property0->getValue($this->person));
 		$this->assertSame($name2, $property1->getValue($this->person));
-		
+
+	}
+
+	public function testGreeting(): void
+	{
+		$expected = 'Hello ';//TODO set test value
+
+		$this->assertSame($expected, $this->person->greeting());
 	}
 
 	public function testAdd(): void
 	{
-		$expected = '';//TODO set test value
-		$x=''; //TODO set test value
-		$y=''; //TODO set test value
-		
+		$expected = 5;//TODO set test value
+		$x=3; //TODO set test value
+		$y=2; //TODO set test value
+
 		$this->assertSame($expected, $this->person->add($x,$y));
 	}
 
