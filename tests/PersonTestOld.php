@@ -8,17 +8,17 @@ use App\Models\Person;
 use ReflectionClass;
 use PHPUnit\Framework\TestCase;
 
-class PersonUMLTest extends TestCase{
+class PersonTest extends TestCase{
 	protected $person;
 	protected $name;
 	protected $name2;
 
 	protected function setUp(): void
 	{
-		parent::setUp();
+	parent::setUp();
 		$this->name=''; //TODO set test value
 		$this->name2=''; //TODO set test value
-		$this->person = new Person($this->name,$this->name2);
+		$this->person = new Person($this->name);
 	}
 
 	protected function tearDown(): void
@@ -28,6 +28,13 @@ class PersonUMLTest extends TestCase{
 		unset($this->person);
 		unset($this->name);
 		unset($this->name2);
+	}
+
+	public function testGreeting(): void
+	{
+		$expected = '';//TODO set test value
+		
+		$this->assertSame($expected, $this->person->greeting());
 	}
 
 	public function testGetName(): void
@@ -53,13 +60,6 @@ class PersonUMLTest extends TestCase{
 		$this->assertSame($name, $property0->getValue($this->person));
 		$this->assertSame($name2, $property1->getValue($this->person));
 		
-	}
-
-	public function testGreeting(): void
-	{
-		$expected = '';//TODO set test value
-		
-		$this->assertSame($expected, $this->person->greeting());
 	}
 
 	public function testAdd(): void

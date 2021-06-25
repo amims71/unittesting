@@ -40,8 +40,9 @@ class PersonTest extends TestCase{
 	public function testGetName(): void
 	{
 		$expected = '';//TODO set test value
+		$name=''; //TODO set test value
 		
-		$this->assertSame($expected, $this->person->getName());
+		$this->assertSame($expected, $this->person->getName($name));
 	}
 
 	public function testSetName(): void

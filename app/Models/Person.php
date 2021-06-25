@@ -14,8 +14,9 @@ class Person
         return "Hello {$this->name}";
     }
 
-    public function getName(){
-        return $this->name;
+    public function getName($name){
+        echo $name;
+        return $name;
     }
 
     public function setName( $name, $name2): void{
