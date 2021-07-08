@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Http;
 
 class GenerateUnitTesting extends Command
 {
@@ -20,7 +19,7 @@ class GenerateUnitTesting extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Generates Unit Test';
 
     protected $unitTestHelper;
 
@@ -60,7 +59,8 @@ class GenerateUnitTesting extends Command
             }
             $this->unitTestHelper->output.=$testMethods;
             $this->unitTestHelper->closeClass();
-            file_put_contents('tests/'.$this->unitTestHelper->class->name->name.'Test.php',$this->unitTestHelper->output);
+            $fileName='tests/'.$this->unitTestHelper->class->name->name.'Test.php';
+            file_put_contents($fileName,$this->unitTestHelper->output);
             $this->info($this->unitTestHelper->output);
         } elseif ($type=='json'){
             $this->unitTestHelper=new UnitTestHelperJson($file);
