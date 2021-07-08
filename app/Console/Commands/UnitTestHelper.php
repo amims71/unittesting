@@ -29,15 +29,42 @@ class UnitTestHelper{
         $this->object=$ast[0];
         $this->class=$this->object->stmts[0];
         $statements=$this->class->stmts;
+
+        $extendedClass=$this->class->extends->parts[0];
+
         foreach ($statements as $statement){
             if ($statement instanceof Property){
-                array_push($this->properties,$statement);
+                array_push($this->properties,$statement); //add properties to property list
             } elseif ($statement instanceof ClassMethod){
                 if ($statement->name->name=='__construct') $this->constructor=$statement;
-                else array_push($this->methods,$statement);
+                else array_push($this->methods,$statement); //add methods to methods list
             }
         }
 
+        //add properties and methods in list from extended class
+        if ($extendedClass){
+            $fileArray=explode('/',$file);
+            array_pop($fileArray);
+            array_push($fileArray,$extendedClass.'.php');
+            $extendedFile=implode('/',$fileArray);
+            $code=file_get_contents($extendedFile);
+
+            try {
+                $ast=$parser->parse($code);
+            } catch (Error $error) {
+                echo "Parse error: {$error->getMessage()}\n";
+            }
+            $statements=$ast[0]->stmts[0]->stmts;
+
+            foreach ($statements as $statement){
+                if ($statement instanceof Property){
+                    array_push($this->properties,$statement); //add properties to property list
+                } elseif ($statement instanceof ClassMethod){
+                    if ($statement->name->name=='__construct') $this->constructor=$statement;
+                    else array_push($this->methods,$statement); //add methods to methods list
+                }
+            }
+        }
 
         foreach ($this->constructor->params as $param){
             $this->constructorParams.='$this->'.$param->var->name.',';
@@ -70,6 +97,7 @@ class UnitTestHelper{
             $this->output.=PHP_EOL."\t".'protected $'.$property->props[0]->name->name.';';
         }
     }
+
     public function addSetUp(){
         $this->output.=PHP_EOL.PHP_EOL."\t".'protected function setUp(): void'.PHP_EOL."\t".'{'.PHP_EOL."\t".'parent::setUp();';
         foreach ($this->properties as $property){
@@ -127,9 +155,9 @@ class UnitTestHelper{
         }
         return $testMethods;
     }
+
     public function closeClass(){
         $this->output.='}';
     }
-
 
 }
