@@ -12,12 +12,18 @@ class PersonTest extends TestCase{
 	protected $person;
 	protected $name;
 	protected $name2;
+	protected $fillable;
+	protected $hidden;
+	protected $casts;
 
 	protected function setUp(): void
 	{
 	parent::setUp();
 		$this->name=''; //TODO set test value
 		$this->name2=''; //TODO set test value
+		$this->fillable=''; //TODO set test value
+		$this->hidden=''; //TODO set test value
+		$this->casts=''; //TODO set test value
 		$this->person = new Person($this->name);
 	}
 
@@ -28,6 +34,9 @@ class PersonTest extends TestCase{
 		unset($this->person);
 		unset($this->name);
 		unset($this->name2);
+		unset($this->fillable);
+		unset($this->hidden);
+		unset($this->casts);
 	}
 
 	public function testGreeting(): void
@@ -70,6 +79,14 @@ class PersonTest extends TestCase{
 		$y=''; //TODO set test value
 		
 		$this->assertSame($expected, $this->person->add($x,$y));
+	}
+
+	public function testTututut(): void
+	{
+		$expected = '';//TODO set test value
+		$text=''; //TODO set test value
+		
+		$this->assertSame($expected, $this->person->tututut($text));
 	}
 
 }

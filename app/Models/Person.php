@@ -1,7 +1,7 @@
 <?php
 namespace App\Models;
 
-class Person
+class Person extends User
 {
     protected $name;
     protected $name2;
